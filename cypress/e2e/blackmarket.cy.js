@@ -1,0 +1,20 @@
+describe('template spec', () => {
+  it('renisialisation du mot de passe', () => {
+    cy.visit('https://preprod.backmarket.fr/fr-fr/password-reset')
+    cy.get('[data-qa="accept-cta"] > .MkLAMntR > ._2GvJDBxS').click()
+    cy.get('#email').type('e9e58fbb-79d8-41df-aa53-413a23f344fe@mailslurp.com')
+    cy.get('.MkLAMntR').click()
+    cy.mailslurp()
+    .then(mailslurp => mailslurp.waitForLatestEmail('e9e58fbb-79d8-41df-aa53-413a23f344fe',40000, true))
+    .then(email => //expect(email.subject).to.contain("Nouveau mot de passe"))
+    cy.document().invoke('write', email.body));
+    cy.get('.t_pt20px > a').click()
+    cy.get('#newPassword').type('Fa1234567')
+    cy.get('#newPasswordConfirmation').type('Fa1234567')
+    cy.get('.MkLAMntR').click()
+    cy.get('#email').type('e9e58fbb-79d8-41df-aa53-413a23f344fe@mailslurp.com')
+    cy.get('#submit-login').click()
+    cy.get('#password').type('Fa1234567')
+    cy.get('#submit-login').click()
+})
+})
